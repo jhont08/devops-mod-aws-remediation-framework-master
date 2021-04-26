@@ -22,4 +22,4 @@ fi
 done
 
 # Install libraries
-pip3 install --target resources/remediator/module_cache/ -r resources/remediator/requirements.txt --use-feature=2020-resolver
+pip3 install --target resources/remediator/module_cache/ -r resources/remediator/requirements.txt

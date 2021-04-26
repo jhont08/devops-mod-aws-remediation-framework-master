@@ -6,6 +6,9 @@ TERRAFORM_BUCKET=$bucket_name_prefix
 mkdir -p cache
 rm -f cache/*.zip
 
+# Install libraries
+#pip3 install --target resources/remediator/module_cache/ -r resources/remediator/requirements.txt
+
 # Create a .zip of src for the remediator
 pushd resources/remediator
 zip -r --exclude=module_cache/* ../../cache/remediator.zip *
@@ -21,6 +24,10 @@ popd
 pushd resources/event_translator
 zip -r --exclude=module_cache/* ../../cache/event_translator.zip *
 popd
+# Crete a .zip of src for the notification
+pushd resources/notification
+zip -r --exclude=module_cache/* ../../cache/notification.zip *
+popd
 
 #iterate over regions
 Field_Separator=$IFS
@@ -33,13 +40,10 @@ if [ $region = $master_region ]; then
 aws s3 cp cache/remediator.zip s3://$TERRAFORM_BUCKET-$region/remediator.zip --sse
 aws s3 cp cache/poller.zip s3://$TERRAFORM_BUCKET-$region/poller.zip --sse
 aws s3 cp cache/event_translator.zip s3://$TERRAFORM_BUCKET-$region/event_translator.zip --sse
+aws s3 cp cache/notification.zip s3://$TERRAFORM_BUCKET-$region/notification.zip --sse
 else
 # This lambda needs to be moved to all regions
 aws s3 cp cache/event_translator.zip s3://$TERRAFORM_BUCKET-$region/event_translator.zip --sse
 
 fi
 done
-
-# Deploy the AWS resources
-
-terraform apply -var lambda_bucket=$TERRAFORM_BUCKET

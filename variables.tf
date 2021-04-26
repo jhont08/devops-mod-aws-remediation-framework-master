@@ -1,5 +1,5 @@
 variable "tags" {
-    type = "map"
+    type = map
 
     default = {
         team = "DevSecOps"
@@ -14,7 +14,7 @@ variable "master_region" {
 
 variable "accounts" {
   description = "list of aws accounts to watch for misconfigurations"
-  default = "489774021742"
+  default = ""
 }
 
 variable "regions" {
@@ -70,4 +70,12 @@ variable "remediation_module_exception" {
         "123456789012":["ami"]
         "random-account": ["ami","ec2"]
   }
+}
+
+variable "function_name" {
+  default = "remediator"
+}
+
+variable "lambda_bucket" {
+  description = "Lambda Bucket"
 }

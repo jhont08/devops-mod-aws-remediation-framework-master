@@ -4,11 +4,6 @@ variable "lambda_bucket" {}
 variable "function_name" {}
 variable "iam_role" {}
 
-provider "aws" {
-  profile = "default"
-  region  = var.region
-}
-
 # Event translator
 resource "aws_cloudwatch_log_group" "event_translator" {
   name              = "/aws/lambda/event_translator"
