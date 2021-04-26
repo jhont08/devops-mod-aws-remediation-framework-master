@@ -37,7 +37,7 @@ def audit(resource, remediate=False):
 
     if allows_public_ingress:
         is_compliant = False
-        issue = "Security Group {} not compliant - Allows public ingress".format(
+        issue = "Security Group {} not compliant - Allows public ingress - Remediated".format(
             resource["id"]
         )
         if remediate:

@@ -8,13 +8,6 @@ provider "aws" {
   region  = var.master_region
 }
 
-variable "function_name" {
-  default = "remediator"
-}
-
-variable "lambda_bucket" {
-}
-
 # Be able to get the account ID
 data "aws_caller_identity" "current" {}
 
@@ -165,38 +158,18 @@ resource "aws_iam_role_policy_attachment" "event_translator" {
 
 # Setup the event translators in each region
 # terraform doesn't support count or for_each in modules, revisit after terraform 0.13 release
-module "events-us-east-1" {
-  source        = "./event_translator"
-  region        = "us-east-1"
+
+module "events" {
+  source = "./event_translator"
+
+  count         = length(split(",", var.regions))
+  region        = element(split(",",var.regions), count.index)
   lambda_bucket = var.lambda_bucket
   function_name = var.function_name
   sqs           = aws_sqs_queue.resource_queue
   iam_role      = aws_iam_role.event_translator.arn
+
+  providers = {
+    aws.provider = aws
+  }
 }
-
-module "events-us-east-2" {
-  source        = "./event_translator"
-  region        = "us-east-2"
-  lambda_bucket = var.lambda_bucket
-  function_name = var.function_name
-  sqs           = aws_sqs_queue.resource_queue
-  iam_role      = aws_iam_role.event_translator.arn
-}
-
-# module "events-us-west-1" {
-#   source        = "./event_translator"
-#   region        = "us-west-1"
-#   lambda_bucket = var.lambda_bucket
-#   function_name = var.function_name
-#   sqs           = aws_sqs_queue.resource_queue
-#   iam_role      = aws_iam_role.event_translator.arn
-# }
-
-# module "events-us-west-2" {
-#   source        = "./event_translator"
-#   region        = "us-west-2"
-#   lambda_bucket = var.lambda_bucket
-#   function_name = var.function_name
-#   sqs           = aws_sqs_queue.resource_queue
-#   iam_role      = aws_iam_role.event_translator.arn
-# }

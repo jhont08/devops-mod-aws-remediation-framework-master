@@ -82,12 +82,13 @@ def send_notification(summary, description, resource):
     message = description + '\n\n' + json.dumps(resource)
     sns = boto3.client("sns",region)
 
-    description = "Account:{}\nRegion:{}\nResource type:{}\nIdentifier:{}\n\n{}".format(
+    description = "Account:{}\nRegion:{}\nResource type:{}\nIdentifier:{}\n{}\n\n{}".format(
         resource["account"],
         resource["region"],
         resource["type"],
         resource["id"],
         description,
+        summary,
     )
     try:
         ticket_id = sns.publish(TopicArn=topic, Message=description,Subject=summary)
