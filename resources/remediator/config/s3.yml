@@ -1,0 +1,9 @@
+version: 1
+
+s3:
+  "tags":
+    "public": "allow_public_access"
+    "public_access_block": "allow_public_access_block"
+    "public_acl": "allow_public_acl"
+    "encrypted": "force_encrypted"
+    "tls": "force_tls"

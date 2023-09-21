@@ -1,0 +1,4 @@
+version: 1
+
+security_group:
+  "port_allow": "ports_allowed"
